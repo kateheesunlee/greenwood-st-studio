@@ -1,6 +1,6 @@
 // Greenwood Street Studio – brand tokens
 export const tokens = {
-  primary: "#4C5B20", // deep olive
+  primary: "#5B6F3A", // deep olive
   secondary: "#919C7C", // olive grey
   grey600: "#929292",
   grey300: "#BABFB6",

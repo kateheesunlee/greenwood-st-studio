@@ -12,14 +12,42 @@ import {
 } from "@mui/material";
 import Button from "../components/Button";
 import { ScrollAnimation } from "../components/ScrollAnimation";
+import { EmailForm } from "../components/EmailForm";
+import { useEffect, useState } from "react";
+import { projects } from "../data/projects";
 
 export default function Home() {
+  const [emailFormOpen, setEmailFormOpen] = useState(false);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // Handle hash navigation when coming from other pages
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const sectionId = hash.substring(1); // Remove the # symbol
+        setTimeout(() => {
+          scrollToSection(sectionId);
+        }, 100); // Small delay to ensure page is loaded
+      }
+    };
+
+    // Handle initial load
+    handleHashNavigation();
+
+    // Handle hash changes
+    window.addEventListener("hashchange", handleHashNavigation);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashNavigation);
+    };
+  }, []);
 
   return (
     <Box component="main" sx={{ flex: 1 }}>
@@ -292,28 +320,7 @@ export default function Home() {
             </Typography>
           </ScrollAnimation>
           <Grid container spacing={4}>
-            {[
-              {
-                title: "Espresso Log",
-                description: "Description 1",
-                image: "https://via.placeholder.com/150",
-              },
-              {
-                title: "Wine Log",
-                description: "Description 2",
-                image: "https://via.placeholder.com/150",
-              },
-              {
-                title: "Just in plan",
-                description: "Description 3",
-                image: "https://via.placeholder.com/150",
-              },
-              {
-                title: "Parent Assistant",
-                description: "Description 4",
-                image: "https://via.placeholder.com/150",
-              },
-            ].map((item, index) => (
+            {projects.map((item, index) => (
               <Grid size={{ xs: 12, sm: 6 }} key={item.title} component="div">
                 <ScrollAnimation
                   direction="up"
@@ -321,32 +328,129 @@ export default function Home() {
                   delay={0.2 + (index - 1) * 0.1}
                 >
                   <Paper
+                    component="a"
+                    href={item.url}
                     sx={{
                       height: 300,
-                      backgroundColor: "grey.100",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       borderRadius: 2,
-                      flexDirection: "column",
-                      gap: 1,
+                      overflow: "hidden",
+                      position: "relative",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                      display: "block",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-8px)",
+                        boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
+                        "& .background-image": {
+                          filter: "blur(2px) brightness(0.4)",
+                        },
+                        "& .hover-content": {
+                          opacity: 1,
+                        },
+                        "& .hover-overlay": {
+                          opacity: 1,
+                        },
+                      },
                     }}
                   >
-                    <Typography
-                      variant="h3"
-                      color="primary.light"
-                      fontWeight={600}
+                    {/* Background Image */}
+                    <Box
+                      className="background-image"
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: `url(${item.image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        transition: "filter 0.3s ease",
+                      }}
+                    />
+
+                    {/* Content */}
+                    <Box
+                      sx={{
+                        position: "relative",
+                        zIndex: 2,
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        p: 3,
+                        textAlign: "center",
+                      }}
                     >
-                      {item.title}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      color="primary.light"
-                      fontWeight={600}
-                      sx={{ opacity: 0.8 }}
-                    >
-                      Coming soon...
-                    </Typography>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          fontFamily: "var(--font-pacifico)",
+                          fontSize: "2rem",
+                          color: "white",
+                          fontWeight: 400,
+                          mb: 2,
+                          textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+                          transition: "opacity 0.3s ease",
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
+
+                      {/* Hover Content */}
+                      <Box
+                        className="hover-content"
+                        sx={{
+                          opacity: 0,
+                          transition: "opacity 0.3s ease",
+                        }}
+                      >
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: "white",
+                            mb: 2,
+                            textShadow: "0 1px 2px rgba(0,0,0,0.7)",
+                            fontSize: "0.9rem",
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          {item.description}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: "white",
+                            backgroundColor: "rgba(255,255,255,0.2)",
+                            px: 2,
+                            py: 0.5,
+                            borderRadius: 1,
+                            textShadow: "0 1px 2px rgba(0,0,0,0.7)",
+                            backdropFilter: "blur(10px)",
+                          }}
+                        >
+                          {item.status}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Hover Overlay */}
+                    <Box
+                      className="hover-overlay"
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(0,0,0,0.3)",
+                        opacity: 0,
+                        transition: "opacity 0.3s ease",
+                        zIndex: 1,
+                      }}
+                    />
                   </Paper>
                 </ScrollAnimation>
               </Grid>
@@ -407,11 +511,19 @@ export default function Home() {
               </Typography>
             </ScrollAnimation>
             <ScrollAnimation direction="up" distance={20} delay={0.3}>
-              <Button variant="secondary">Say hi!</Button>
+              <Button
+                variant="secondary"
+                onClick={() => setEmailFormOpen(true)}
+              >
+                Say hi!
+              </Button>
             </ScrollAnimation>
           </Box>
         </Container>
       </Box>
+
+      {/* Email Form */}
+      <EmailForm open={emailFormOpen} onClose={() => setEmailFormOpen(false)} />
     </Box>
   );
 }

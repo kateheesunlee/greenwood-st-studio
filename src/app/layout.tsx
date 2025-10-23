@@ -25,7 +25,25 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Greenwood Street Studio",
-  description: "Greenwood Street Studio - Creative Design Studio",
+  description:
+    "A personal playground for design, code, and everyday experiments by Kate Heesun Lee.",
+  openGraph: {
+    title: "Greenwood St Studio",
+    description:
+      "A personal playground for design, code, and everyday experiments.",
+    url: "https://greenwoodststudio.com",
+    siteName: "Greenwood Street Studio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Greenwood St Studio preview image",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
