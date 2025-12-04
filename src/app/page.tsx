@@ -55,23 +55,21 @@ export default function Home() {
         id="home"
         sx={{
           height: "100vh",
-          // M3: 깔끔한 배경색(neutral99) 사용
           backgroundColor: "background.default",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          p: { xs: 2, sm: 4 },
-          gap: 4,
+          justifyContent: "flex-start",
+          p: { xs: 4, sm: 6 },
         }}
       >
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
+          {" "}
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
+              alignItems: "flex-start",
+              textAlign: "left",
             }}
           >
             <Typography
@@ -82,20 +80,22 @@ export default function Home() {
                 color: "primary.main",
                 fontWeight: 400,
                 mb: 2,
-                fontSize: { xs: "2.5rem", md: "4rem" },
+                fontSize: { xs: "2.5rem", md: "4.5rem" }, // 폰트 크기 약간 키움
+                maxWidth: { md: "600px" },
+                lineHeight: 1.4,
               }}
             >
               Greenwood Street Studio
             </Typography>
 
             <Typography
-              variant="h6"
+              variant="h5" // h6에서 h5로 올려 강조
               sx={{
-                // 보조 색상 (secondary.main: Sage Green) 활용
                 color: "secondary.main",
-                fontWeight: 600,
+                fontWeight: 500, // 굵기 조정
                 mb: 8,
-                fontSize: { xs: "0.8rem", md: "1rem" },
+                fontSize: { xs: "1rem", md: "1.25rem" },
+                maxWidth: { md: "450px" },
               }}
             >
               A personal playground for design, code, and everyday experiments.
@@ -170,6 +170,7 @@ export default function Home() {
                     borderRadius: theme.shape.borderRadius,
                     overflow: "hidden",
                     position: "relative",
+                    boxShadow: theme.shadows[4],
                   }}
                 >
                   <Image
@@ -302,7 +303,6 @@ export default function Home() {
         id="projects"
         sx={{
           minHeight: "100vh",
-          // M3: Neutral 톤 배경
           background: `linear-gradient(315deg, ${theme.palette.background.default} 0%, ${theme.palette.grey[300]} 100%)`,
           display: "flex",
           alignItems: "center",
@@ -337,7 +337,6 @@ export default function Home() {
                     href={item.url}
                     sx={{
                       height: 300,
-                      // M3: 둥근 모서리 적용 (12px)
                       borderRadius: theme.shape.borderRadius,
                       overflow: "hidden",
                       position: "relative",
@@ -347,7 +346,6 @@ export default function Home() {
                       transition: "transform 0.3s ease, box-shadow 0.3s ease",
                       "&:hover": {
                         transform: "translateY(-8px)",
-                        // Primary 색상을 이용한 은은한 그림자
                         boxShadow: `0 12px 24px ${theme.palette.primary.dark}30`,
                         "& .background-image": {
                           filter: "blur(2px) brightness(0.4)",
@@ -361,7 +359,8 @@ export default function Home() {
                       },
                     }}
                   >
-                    {/* Background Image, Content, Hover Content, Hover Overlay 유지 */}
+                    {/* Background Image, Hover Overlay (유지) */}
+
                     <Box
                       className="background-image"
                       sx={{
@@ -392,6 +391,7 @@ export default function Home() {
                       <Typography
                         variant="h4"
                         sx={{
+                          // Pacifico 폰트 제거 -> 기본 폰트 사용 (모던함 강화)
                           fontSize: "2rem",
                           color: "white",
                           fontWeight: 600,
@@ -421,21 +421,27 @@ export default function Home() {
                         >
                           {item.description}
                         </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "white",
-                            // Secondary light (Sage Green)을 투명하게 사용하여 M3 톤 유지
-                            backgroundColor: `${theme.palette.secondary.light}40`,
-                            px: 2,
-                            py: 0.5,
-                            borderRadius: 1,
-                            textShadow: "0 1px 2px rgba(0,0,0,0.7)",
-                            backdropFilter: "blur(5px)",
-                          }}
-                        >
-                          {item.status}
-                        </Typography>
+                        <Box component="span">
+                          <Typography
+                            variant="caption"
+                            component="span"
+                            sx={{
+                              color: theme.palette.primary.main,
+                              backgroundColor: theme.palette.secondary.light,
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius:
+                                (theme.shape.borderRadius as number) / 2,
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                              textShadow: "none",
+                              backdropFilter: "blur(2px)",
+                              border: `1px solid ${theme.palette.tertiary.main}80`,
+                            }}
+                          >
+                            {item.status}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
                     <Box
