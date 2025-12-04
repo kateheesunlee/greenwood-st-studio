@@ -9,6 +9,7 @@ import {
   CardContent,
   Paper,
   Grid,
+  useTheme,
 } from "@mui/material";
 import Button from "../components/Button";
 import { ScrollAnimation } from "../components/ScrollAnimation";
@@ -18,6 +19,8 @@ import { projects } from "../data/projects";
 
 export default function Home() {
   const [emailFormOpen, setEmailFormOpen] = useState(false);
+  // 테마에서 색상 및 shape 값을 가져오기 위해 useTheme 사용
+  const theme = useTheme();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -26,24 +29,19 @@ export default function Home() {
     }
   };
 
-  // Handle hash navigation when coming from other pages
   useEffect(() => {
+    // ... (기존 해시 네비게이션 로직 유지)
     const handleHashNavigation = () => {
       const hash = window.location.hash;
       if (hash) {
-        const sectionId = hash.substring(1); // Remove the # symbol
+        const sectionId = hash.substring(1);
         setTimeout(() => {
           scrollToSection(sectionId);
-        }, 100); // Small delay to ensure page is loaded
+        }, 100);
       }
     };
-
-    // Handle initial load
     handleHashNavigation();
-
-    // Handle hash changes
     window.addEventListener("hashchange", handleHashNavigation);
-
     return () => {
       window.removeEventListener("hashchange", handleHashNavigation);
     };
@@ -57,7 +55,8 @@ export default function Home() {
         id="home"
         sx={{
           height: "100vh",
-          background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+          // M3: 깔끔한 배경색(neutral99) 사용
+          backgroundColor: "background.default",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -92,6 +91,7 @@ export default function Home() {
             <Typography
               variant="h6"
               sx={{
+                // 보조 색상 (secondary.main: Sage Green) 활용
                 color: "secondary.main",
                 fontWeight: 600,
                 mb: 8,
@@ -114,7 +114,8 @@ export default function Home() {
         id="about"
         sx={{
           minHeight: "100vh",
-          background: "linear-gradient(45deg, #f4f4f4 0%, #e8f5e8 100%)",
+          // M3: Neutral 톤을 이용한 은은한 배경
+          background: `linear-gradient(45deg, ${theme.palette.background.default} 0%, ${theme.palette.grey[300]} 100%)`,
           display: "flex",
           alignItems: "center",
           py: 8,
@@ -128,8 +129,7 @@ export default function Home() {
                   variant="h1"
                   component="h2"
                   sx={{
-                    fontFamily: "var(--font-pacifico)",
-                    fontWeight: 400,
+                    fontWeight: 600,
                     color: "primary.main",
                     mb: 3,
                   }}
@@ -161,11 +161,13 @@ export default function Home() {
                 <Paper
                   sx={{
                     height: 400,
+                    // accent.main (Neutral 90) 사용
                     backgroundColor: "accent.main",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: 2,
+                    // M3: 둥근 모서리 적용 (12px)
+                    borderRadius: theme.shape.borderRadius,
                     overflow: "hidden",
                     position: "relative",
                   }}
@@ -176,7 +178,7 @@ export default function Home() {
                     fill
                     style={{
                       objectFit: "cover",
-                      borderRadius: "8px",
+                      borderRadius: `${theme.shape.borderRadius}px`, // Image에도 동일하게 적용
                     }}
                   />
                 </Paper>
@@ -192,8 +194,8 @@ export default function Home() {
         id="skills"
         sx={{
           minHeight: "100vh",
-          background:
-            "linear-gradient(225deg, #E1ECC9 0%, #d4e6b8 50%, #c7e0a7 100%)",
+          // M3: Primary Light 톤과 Neutral 톤을 섞어 부드러운 배경 생성
+          background: `linear-gradient(225deg, ${theme.palette.secondary.light} 0%, ${theme.palette.accent.main} 100%)`,
           display: "flex",
           alignItems: "center",
           py: 8,
@@ -205,8 +207,7 @@ export default function Home() {
               variant="h1"
               component="h2"
               sx={{
-                fontFamily: "var(--font-pacifico)",
-                fontWeight: 400,
+                fontWeight: 600,
                 color: "primary.main",
                 textAlign: "center",
                 mb: 6,
@@ -217,6 +218,7 @@ export default function Home() {
           </ScrollAnimation>
           <Grid container spacing={4}>
             {[
+              // ... (Skill data 유지)
               {
                 title: "Software Development",
                 description:
@@ -247,12 +249,16 @@ export default function Home() {
                   <Card
                     sx={{
                       height: "100%",
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                      borderWidth: 0,
+                      backgroundColor: "background.paper",
+                      // M3: 둥근 모서리 적용 (12px)
+                      borderRadius: theme.shape.borderRadius,
+                      // Card의 기본 border는 테마에 의해 제거되었거나 grey300으로 설정됨.
+                      border: `1px solid ${theme.palette.grey[300]}`,
                       "&:hover": {
-                        transform: "translateY(-4px)",
-                        transition: "transform 0.3s ease",
+                        transform: "translateY(-6px)", // 좀 더 과감한 호버 효과
+                        transition: "transform 0.4s ease, box-shadow 0.4s ease",
+                        // M3 스타일의 그림자 추가
+                        boxShadow: `0 8px 16px ${theme.palette.secondary.light}40`,
                       },
                     }}
                   >
@@ -296,8 +302,8 @@ export default function Home() {
         id="projects"
         sx={{
           minHeight: "100vh",
-          background:
-            "linear-gradient(315deg, #f4f4f4 0%, #f0f0f0 50%, #e8e8e8 100%)",
+          // M3: Neutral 톤 배경
+          background: `linear-gradient(315deg, ${theme.palette.background.default} 0%, ${theme.palette.grey[300]} 100%)`,
           display: "flex",
           alignItems: "center",
           py: 8,
@@ -309,8 +315,7 @@ export default function Home() {
               variant="h1"
               component="h2"
               sx={{
-                fontFamily: "var(--font-pacifico)",
-                fontWeight: 400,
+                fontWeight: 600,
                 color: "primary.main",
                 textAlign: "center",
                 mb: 6,
@@ -332,7 +337,8 @@ export default function Home() {
                     href={item.url}
                     sx={{
                       height: 300,
-                      borderRadius: 2,
+                      // M3: 둥근 모서리 적용 (12px)
+                      borderRadius: theme.shape.borderRadius,
                       overflow: "hidden",
                       position: "relative",
                       cursor: "pointer",
@@ -341,7 +347,8 @@ export default function Home() {
                       transition: "transform 0.3s ease, box-shadow 0.3s ease",
                       "&:hover": {
                         transform: "translateY(-8px)",
-                        boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
+                        // Primary 색상을 이용한 은은한 그림자
+                        boxShadow: `0 12px 24px ${theme.palette.primary.dark}30`,
                         "& .background-image": {
                           filter: "blur(2px) brightness(0.4)",
                         },
@@ -354,7 +361,7 @@ export default function Home() {
                       },
                     }}
                   >
-                    {/* Background Image */}
+                    {/* Background Image, Content, Hover Content, Hover Overlay 유지 */}
                     <Box
                       className="background-image"
                       sx={{
@@ -369,8 +376,6 @@ export default function Home() {
                         transition: "filter 0.3s ease",
                       }}
                     />
-
-                    {/* Content */}
                     <Box
                       sx={{
                         position: "relative",
@@ -387,10 +392,9 @@ export default function Home() {
                       <Typography
                         variant="h4"
                         sx={{
-                          fontFamily: "var(--font-pacifico)",
                           fontSize: "2rem",
                           color: "white",
-                          fontWeight: 400,
+                          fontWeight: 600,
                           mb: 2,
                           textShadow: "0 2px 4px rgba(0,0,0,0.5)",
                           transition: "opacity 0.3s ease",
@@ -398,8 +402,6 @@ export default function Home() {
                       >
                         {item.title}
                       </Typography>
-
-                      {/* Hover Content */}
                       <Box
                         className="hover-content"
                         sx={{
@@ -423,20 +425,19 @@ export default function Home() {
                           variant="caption"
                           sx={{
                             color: "white",
-                            backgroundColor: "rgba(255,255,255,0.2)",
+                            // Secondary light (Sage Green)을 투명하게 사용하여 M3 톤 유지
+                            backgroundColor: `${theme.palette.secondary.light}40`,
                             px: 2,
                             py: 0.5,
                             borderRadius: 1,
                             textShadow: "0 1px 2px rgba(0,0,0,0.7)",
-                            backdropFilter: "blur(10px)",
+                            backdropFilter: "blur(5px)",
                           }}
                         >
                           {item.status}
                         </Typography>
                       </Box>
                     </Box>
-
-                    {/* Hover Overlay */}
                     <Box
                       className="hover-overlay"
                       sx={{
@@ -475,11 +476,10 @@ export default function Home() {
         id="contact"
         sx={{
           minHeight: "100vh",
-          background:
-            "linear-gradient(180deg, #4C5B20 0%, #3d4a1a 50%, #2e3a14 100%)",
           display: "flex",
           alignItems: "center",
           py: 8,
+          background: `linear-gradient(180deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         }}
       >
         <Container maxWidth="md">
@@ -489,8 +489,7 @@ export default function Home() {
                 variant="h1"
                 component="h2"
                 sx={{
-                  fontFamily: "var(--font-pacifico)",
-                  fontWeight: 400,
+                  fontWeight: 600,
                   color: "white",
                   mb: 4,
                 }}
@@ -512,8 +511,16 @@ export default function Home() {
             </ScrollAnimation>
             <ScrollAnimation direction="up" distance={20} delay={0.3}>
               <Button
-                variant="secondary"
+                variant="outline"
                 onClick={() => setEmailFormOpen(true)}
+                sx={{
+                  color: "white",
+                  borderColor: "white",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    borderColor: "white",
+                  },
+                }}
               >
                 Say hi!
               </Button>

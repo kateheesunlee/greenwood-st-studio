@@ -1,37 +1,50 @@
 import { createTheme } from "@mui/material/styles";
-import { tokens } from "./tokens";
+import { M3_GREEN_TOKENS } from "./tokens";
 
 // Create MUI theme using design tokens
 export const muiTheme = createTheme({
   palette: {
+    // 🌲 Primary: #43673F
     primary: {
-      main: tokens.primary, // #4C5B20 - deep olive
-      light: tokens.secondary, // #919C7C - olive grey (lighter variant)
-      dark: tokens.black, // #000000 - darker variant
-      contrastText: tokens.white, // #FFFFFF
+      main: M3_GREEN_TOKENS.primary, // #43673F - Moss Green
+      light: M3_GREEN_TOKENS.primaryLight, // #72956C - Light Moss Green
+      dark: M3_GREEN_TOKENS.primaryDark, // #2C4B29 - Dark Moss Green
+      contrastText: M3_GREEN_TOKENS.white, // #FFFFFF
     },
+    // 🌿 Secondary: #779973
     secondary: {
-      main: tokens.secondary, // #919C7C - olive grey
-      light: tokens.grey300, // #BABFB6 - lighter grey
-      dark: tokens.grey600, // #929292 - darker grey
-      contrastText: tokens.white, // #FFFFFF
+      main: M3_GREEN_TOKENS.secondary, // #779973 - Sage Green
+      light: M3_GREEN_TOKENS.secondaryLight, // #91B98D - Lighter Sage Green
+      dark: M3_GREEN_TOKENS.primary, // Primary와 톤을 맞춤
+      contrastText: M3_GREEN_TOKENS.white, // #FFFFFF
     },
+    // ✨ Tertiary (M3 추가): #5B7B7C - 포인트 색상
+    tertiary: {
+      main: M3_GREEN_TOKENS.tertiary, // #5B7B7C - Teal Green
+      light: M3_GREEN_TOKENS.secondaryLight,
+      dark: M3_GREEN_TOKENS.primaryDark,
+      contrastText: M3_GREEN_TOKENS.white,
+    },
+    // 🌕 Background
     background: {
-      default: tokens.nearWhite, // #F4F4F4 - near white
-      paper: tokens.white, // #FFFFFF - white
+      default: M3_GREEN_TOKENS.neutral99, // #FBFDFA - 아주 밝은 배경
+      paper: M3_GREEN_TOKENS.white, // #FFFFFF - 카드, 모달 등
     },
+    // 🖊️ Text
     text: {
-      primary: tokens.black, // #000000 - black
-      secondary: tokens.grey600, // #929292 - grey
+      primary: M3_GREEN_TOKENS.neutral10, // #1B1C19 - 짙은 텍스트
+      secondary: M3_GREEN_TOKENS.primaryLight, // #72956C - 보조 텍스트
     },
+    // ⚪ Grey (Neutral 톤으로 변경)
     grey: {
-      300: tokens.grey300, // #BABFB6
-      600: tokens.grey600, // #929292
-      900: tokens.black, // #000000
+      300: M3_GREEN_TOKENS.neutral90, // #E2E3DD
+      600: M3_GREEN_TOKENS.primaryLight, // #72956C
+      900: M3_GREEN_TOKENS.neutral10, // #1B1C19
     },
-    // Custom colors for your brand
+    // 💡 Accent (Neutral 90으로 변경)
     accent: {
-      main: tokens.accentBg, // #E1ECC9 - accent background
+      main: M3_GREEN_TOKENS.neutral90, // #E2E3DD - Accent Background
+      contrastText: M3_GREEN_TOKENS.neutral10,
     },
   },
   typography: {
@@ -49,40 +62,32 @@ export const muiTheme = createTheme({
     h1: {
       fontSize: "2.5rem",
       fontWeight: 600,
-      color: tokens.black,
     },
     h2: {
       fontSize: "2rem",
       fontWeight: 600,
-      color: tokens.black,
     },
     h3: {
       fontSize: "1.75rem",
       fontWeight: 500,
-      color: tokens.black,
     },
     h4: {
       fontSize: "1.5rem",
       fontWeight: 500,
-      color: tokens.black,
     },
     h5: {
       fontSize: "1.25rem",
       fontWeight: 500,
-      color: tokens.black,
     },
     h6: {
       fontSize: "1rem",
       fontWeight: 500,
-      color: tokens.black,
     },
     body1: {
       fontSize: "0.875rem", // Smaller than default 1rem
-      color: tokens.black,
     },
     body2: {
       fontSize: "0.875rem",
-      color: tokens.grey600,
     },
     button: {
       textTransform: "none", // Disable uppercase transformation
@@ -93,29 +98,29 @@ export const muiTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          padding: "8px 16px",
-          fontWeight: 500,
+          borderRadius: 10, // shape.borderRadius와 통일성을 위해 10px로 변경
+          padding: "10px 20px",
+          fontWeight: 600,
         },
         contained: {
-          backgroundColor: tokens.primary,
-          color: tokens.white,
+          backgroundColor: M3_GREEN_TOKENS.primary,
+          color: M3_GREEN_TOKENS.white,
           "&:hover": {
-            backgroundColor: tokens.secondary,
+            backgroundColor: M3_GREEN_TOKENS.primaryDark,
           },
         },
         outlined: {
-          borderColor: tokens.primary,
-          color: tokens.primary,
+          borderColor: M3_GREEN_TOKENS.primary,
+          color: M3_GREEN_TOKENS.primary,
           "&:hover": {
-            backgroundColor: tokens.accentBg,
-            borderColor: tokens.secondary,
+            backgroundColor: M3_GREEN_TOKENS.neutral90,
+            borderColor: M3_GREEN_TOKENS.primaryDark,
           },
         },
         text: {
-          color: tokens.primary,
+          color: M3_GREEN_TOKENS.primary,
           "&:hover": {
-            backgroundColor: tokens.accentBg,
+            backgroundColor: M3_GREEN_TOKENS.neutral90,
           },
         },
       },
@@ -123,8 +128,8 @@ export const muiTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: tokens.white,
-          border: `1px solid ${tokens.grey300}`,
+          backgroundColor: M3_GREEN_TOKENS.white,
+          border: `1px solid ${M3_GREEN_TOKENS.neutral90}`,
           borderRadius: 12,
           boxShadow: "none",
         },
@@ -143,13 +148,13 @@ export const muiTheme = createTheme({
           "& .MuiOutlinedInput-root": {
             borderRadius: 8,
             "& fieldset": {
-              borderColor: tokens.grey300,
+              borderColor: M3_GREEN_TOKENS.neutral90,
             },
             "&:hover fieldset": {
-              borderColor: tokens.primary,
+              borderColor: M3_GREEN_TOKENS.primary,
             },
             "&.Mui-focused fieldset": {
-              borderColor: tokens.primary,
+              borderColor: M3_GREEN_TOKENS.primary,
             },
           },
         },
@@ -158,36 +163,37 @@ export const muiTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: tokens.primary,
-          color: tokens.white,
+          backgroundColor: M3_GREEN_TOKENS.primary,
+          color: M3_GREEN_TOKENS.white,
         },
       },
     },
     MuiChip: {
       styleOverrides: {
         root: {
-          backgroundColor: tokens.accentBg,
-          color: tokens.black,
-          border: `1px solid ${tokens.grey300}`,
+          backgroundColor: M3_GREEN_TOKENS.neutral90,
+          color: M3_GREEN_TOKENS.neutral10,
+          border: `1px solid ${M3_GREEN_TOKENS.neutral90}`,
         },
       },
     },
   },
   shape: {
-    borderRadius: 8,
+    borderRadius: 6, // 24px로 변경하여 M3 스타일 강조
   },
   spacing: 8, // 8px base spacing unit
 });
 
-// Extend the theme type to include custom colors and typography
+// Extend the theme type
 declare module "@mui/material/styles" {
   interface Palette {
     accent: Palette["primary"];
+    tertiary: Palette["primary"];
   }
   interface PaletteOptions {
     accent?: PaletteOptions["primary"];
+    tertiary?: PaletteOptions["primary"];
   }
-
   interface TypographyVariants {
     fontFamilySecondary: string;
   }

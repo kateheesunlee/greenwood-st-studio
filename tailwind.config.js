@@ -1,4 +1,4 @@
-import { tokens } from "./src/design/tokens.ts";
+import { M3_GREEN_TOKENS } from "./src/design/tokens.ts";
 
 module.exports = {
   content: ["./src/**/*.{ts,tsx,js,jsx,html}"],
@@ -11,15 +11,15 @@ module.exports = {
       },
       colors: {
         // 직접 hex 매핑
-        primary: tokens.primary,
-        secondary: tokens.secondary,
+        primary: M3_GREEN_TOKENS.primary,
+        secondary: M3_GREEN_TOKENS.secondary,
         gray: {
-          300: tokens.grey300,
-          600: tokens.grey600,
-          900: tokens.black,
+          300: M3_GREEN_TOKENS.neutral30,
+          600: M3_GREEN_TOKENS.neutral60,
+          900: M3_GREEN_TOKENS.neutral90,
         },
-        accent: tokens.accentBg,
-        paper: tokens.white,
+        accent: M3_GREEN_TOKENS.neutral90,
+        paper: M3_GREEN_TOKENS.white,
         surface: tokens.nearWhite,
       },
       borderColor: {
