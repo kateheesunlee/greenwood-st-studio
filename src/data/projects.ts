@@ -21,7 +21,7 @@ export const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop",
     url: "/espresso-log",
-    status: "In Development",
+    status: "Live in Production",
     colors: {
       primary: "#8B4513", // Coffee brown
       secondary: "#A0522D", // Lighter brown
@@ -59,14 +59,14 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "parent-assistant",
-    title: "Parent Assistant",
+    id: "dear-palo",
+    title: "Dear Palo",
     description:
       "Smart tools for busy parents - labeling, summarizing, and translating emails. Create calendar events and tasks from emails.",
     image:
-      "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=300&fit=crop",
-    url: "/parent-assistant",
-    status: "Research",
+      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=400&h=300&fit=crop",
+    url: "/dear-palo",
+    status: "Demo Available",
     colors: {
       primary: "#059669", // Family green
       secondary: "#10B981", // Lighter green

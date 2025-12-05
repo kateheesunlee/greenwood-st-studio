@@ -19,7 +19,6 @@ import { projects } from "../data/projects";
 
 export default function Home() {
   const [emailFormOpen, setEmailFormOpen] = useState(false);
-  // 테마에서 색상 및 shape 값을 가져오기 위해 useTheme 사용
   const theme = useTheme();
 
   const scrollToSection = (sectionId: string) => {
@@ -80,19 +79,19 @@ export default function Home() {
                 color: "primary.main",
                 fontWeight: 400,
                 mb: 2,
-                fontSize: { xs: "2.5rem", md: "4.5rem" }, // 폰트 크기 약간 키움
+                fontSize: { xs: "2.5rem", md: "4.5rem" },
                 maxWidth: { md: "600px" },
                 lineHeight: 1.4,
               }}
             >
-              Greenwood Street Studio
+              Greenwood St. Studio
             </Typography>
 
             <Typography
-              variant="h5" // h6에서 h5로 올려 강조
+              variant="h5"
               sx={{
                 color: "secondary.main",
-                fontWeight: 500, // 굵기 조정
+                fontWeight: 500,
                 mb: 8,
                 fontSize: { xs: "1rem", md: "1.25rem" },
                 maxWidth: { md: "450px" },
@@ -114,7 +113,6 @@ export default function Home() {
         id="about"
         sx={{
           minHeight: "100vh",
-          // M3: Neutral 톤을 이용한 은은한 배경
           background: `linear-gradient(45deg, ${theme.palette.background.default} 0%, ${theme.palette.grey[300]} 100%)`,
           display: "flex",
           alignItems: "center",
@@ -179,7 +177,7 @@ export default function Home() {
                     fill
                     style={{
                       objectFit: "cover",
-                      borderRadius: `${theme.shape.borderRadius}px`, // Image에도 동일하게 적용
+                      borderRadius: `${theme.shape.borderRadius}px`,
                     }}
                   />
                 </Paper>
@@ -195,8 +193,7 @@ export default function Home() {
         id="skills"
         sx={{
           minHeight: "100vh",
-          // M3: Primary Light 톤과 Neutral 톤을 섞어 부드러운 배경 생성
-          background: `linear-gradient(225deg, ${theme.palette.secondary.light} 0%, ${theme.palette.accent.main} 100%)`,
+          background: `linear-gradient(225deg, ${theme.palette.secondary.main} 80%, ${theme.palette.primary.light} 100%)`,
           display: "flex",
           alignItems: "center",
           py: 8,
@@ -219,7 +216,6 @@ export default function Home() {
           </ScrollAnimation>
           <Grid container spacing={4}>
             {[
-              // ... (Skill data 유지)
               {
                 title: "Software Development",
                 description:
@@ -251,14 +247,11 @@ export default function Home() {
                     sx={{
                       height: "100%",
                       backgroundColor: "background.paper",
-                      // M3: 둥근 모서리 적용 (12px)
                       borderRadius: theme.shape.borderRadius,
-                      // Card의 기본 border는 테마에 의해 제거되었거나 grey300으로 설정됨.
                       border: `1px solid ${theme.palette.grey[300]}`,
                       "&:hover": {
-                        transform: "translateY(-6px)", // 좀 더 과감한 호버 효과
+                        transform: "translateY(-6px)",
                         transition: "transform 0.4s ease, box-shadow 0.4s ease",
-                        // M3 스타일의 그림자 추가
                         boxShadow: `0 8px 16px ${theme.palette.secondary.light}40`,
                       },
                     }}

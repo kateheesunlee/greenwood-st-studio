@@ -179,7 +179,7 @@ export const muiTheme = createTheme({
     },
   },
   shape: {
-    borderRadius: 6, // 24px로 변경하여 M3 스타일 강조
+    borderRadius: "24px",
   },
   spacing: 8, // 8px base spacing unit
 });
