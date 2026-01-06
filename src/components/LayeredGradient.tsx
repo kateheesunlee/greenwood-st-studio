@@ -1,6 +1,6 @@
 "use client";
 import { Box, BoxProps, SxProps, Theme } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 
 interface RadialGradientPosition {
   x: number; // 0-100, percentage from left
@@ -28,6 +28,7 @@ interface LayeredGradientProps extends Omit<BoxProps, "sx"> {
   noiseIntensity?: number; // 0-1, noise texture opacity (default: 0.08)
   noiseFrequency?: number; // baseFrequency for noise (default: 0.8)
   noiseOctaves?: number; // numOctaves for noise (default: 4)
+  animationOn?: boolean; // enable/disable animation (default: false)
   children: ReactNode;
   sx?: SxProps<Theme>; // Explicitly include sx prop
 }
@@ -234,6 +235,7 @@ export function LayeredGradient({
   noiseIntensity = 0.08,
   noiseFrequency = 0.8,
   noiseOctaves = 4,
+  animationOn = false,
   children,
   sx,
   ...boxProps
@@ -307,6 +309,168 @@ export function LayeredGradient({
     opacity
   )} 0%, transparent 60%)`;
 
+  // Animation durations (different speeds for each gradient)
+  const animationDurations = [3, 4, 5]; // seconds
+
+  // Generate animation keyframes - memoized to avoid hydration issues
+  const animationKeyframes = useMemo(() => {
+    const getAnimationKeyframes = (index: number) => {
+      const baseX = positions[index].x;
+      const baseY = positions[index].y;
+      const baseWidth = positions[index].width;
+      const baseHeight = positions[index].height;
+
+      // Different movement patterns for each gradient
+      const xOffset = index === 0 ? 12 : index === 1 ? -10 : 8;
+      const yOffset = index === 0 ? 8 : index === 1 ? -12 : -6;
+      const widthOffset = index === 0 ? 0.15 : index === 1 ? -0.12 : 0.18;
+      const heightOffset = index === 0 ? 0.12 : index === 1 ? -0.15 : 0.15;
+
+      // Create smooth interpolation with more keyframes
+      // Calculate intermediate values for smoother animation
+      const steps = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+      const keyframeSteps = steps
+        .map((step) => {
+          // Use easing function for smoother transitions
+          const eased =
+            step < 0.5 ? 2 * step * step : 1 - Math.pow(-2 * step + 2, 2) / 2;
+
+          const currentX = baseX + xOffset * eased;
+          const currentY = baseY + yOffset * eased;
+          const currentWidth = baseWidth * (1 + widthOffset * eased);
+          const currentHeight = baseHeight * (1 + heightOffset * eased);
+
+          return `
+        ${step * 100}% {
+          --grad-x-${index}: ${currentX}%;
+          --grad-y-${index}: ${currentY}%;
+          --grad-width-${index}: ${currentWidth}px;
+          --grad-height-${index}: ${currentHeight}px;
+        }`;
+        })
+        .join("");
+
+      return `
+      @keyframes gradientMove${index} {
+        ${keyframeSteps}
+      }
+    `;
+    };
+
+    return `
+      ${getAnimationKeyframes(0)}
+      ${getAnimationKeyframes(1)}
+      ${getAnimationKeyframes(2)}
+    `;
+  }, [positions]);
+
+  // Inject keyframes on client side only to avoid hydration errors
+  useEffect(() => {
+    if (animationOn && typeof document !== "undefined") {
+      const styleId = `gradient-animations-${mainColor.replace("#", "")}`;
+      let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+
+      if (!styleElement) {
+        styleElement = document.createElement("style");
+        styleElement.id = styleId;
+        document.head.appendChild(styleElement);
+      }
+
+      styleElement.textContent = animationKeyframes;
+
+      return () => {
+        // Cleanup on unmount
+        const element = document.getElementById(styleId);
+        if (element) {
+          element.remove();
+        }
+      };
+    }
+  }, [animationOn, mainColor, animationKeyframes]);
+
+  if (animationOn) {
+    // Animated version: separate layers for each gradient
+    return (
+      <Box
+        component="section"
+        {...boxProps}
+        sx={[
+          {
+            position: "relative",
+            overflow: "hidden",
+          },
+          ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+        ]}
+      >
+        {/* Linear gradient base layer - fixed, no animation */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: linearGradientStr,
+            zIndex: 0,
+            willChange: "auto", // Ensure no animation
+          }}
+        />
+
+        {/* Animated radial gradients */}
+        {[0, 1, 2].map((index) => {
+          const color = hexToRgba(
+            index === 0 ? colors[0] : index === 1 ? colors[1] : colors[2],
+            opacity
+          );
+          return (
+            <Box
+              key={index}
+              sx={{
+                position: "absolute",
+                inset: 0,
+                background: `radial-gradient(var(--grad-width-${index}, ${positions[index].width}px) var(--grad-height-${index}, ${positions[index].height}px) at var(--grad-x-${index}, ${positions[index].x}%) var(--grad-y-${index}, ${positions[index].y}%), ${color} 0%, transparent 60%)`,
+                animation: `gradientMove${index} ${animationDurations[index]}s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate`,
+                willChange: "background",
+                backfaceVisibility: "hidden",
+                transform: "translateZ(0)",
+                zIndex: index + 1,
+              }}
+            />
+          );
+        })}
+
+        {/* Noise texture */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `url("${noiseSvg}")`,
+            pointerEvents: "none",
+            zIndex: 4,
+          }}
+        />
+
+        {/* Content */}
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 5,
+            width: "100%",
+            height: "100%",
+            flex: 1, // Take full flex space
+            display: "flex",
+            flexDirection: "inherit",
+            alignItems: "inherit",
+            justifyContent: "inherit",
+            alignContent: "inherit",
+            flexWrap: "inherit",
+            gap: "inherit",
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    );
+  }
+
+  // Non-animated version (original)
   const baseSx: SxProps<Theme> = {
     position: "relative",
     background: `${radialGradient1}, ${radialGradient2}, ${radialGradient3}, ${linearGradientStr}`,

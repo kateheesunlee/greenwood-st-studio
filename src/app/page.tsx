@@ -51,6 +51,7 @@ export default function Home() {
     <Box component="main" sx={{ flex: 1 }}>
       {/* Hero Section */}
       <LayeredGradient
+        animationOn={true}
         mainColor="#e8f9e7"
         threshold={0.22}
         opacity={1}
@@ -203,6 +204,7 @@ export default function Home() {
       {/* Skills Section */}
       <LayeredGradient
         mainColor="#86dfa5"
+        animationOn={true}
         threshold={0.39}
         opacity={0.62}
         hueShift={2}
@@ -497,6 +499,7 @@ export default function Home() {
       {/* Contact Section */}
       <LayeredGradient
         mainColor="#43663f"
+        animationOn={true}
         threshold={0.37}
         opacity={1}
         hueShift={2}

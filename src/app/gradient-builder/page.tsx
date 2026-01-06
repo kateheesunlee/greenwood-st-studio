@@ -9,6 +9,8 @@ import {
   Divider,
   IconButton,
   Tooltip,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { LayeredGradient } from "../../components/LayeredGradient";
@@ -43,6 +45,7 @@ export default function GradientBuilder() {
   const [linearGradient, setLinearGradient] = useState<LinearGradientConfig>({
     angle: 135,
   });
+  const [animationOn, setAnimationOn] = useState(false);
 
   const updateRadialPosition = (
     index: number,
@@ -254,6 +257,130 @@ export default function GradientBuilder() {
 
     const noiseSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='${noiseFrequency}' numOctaves='${noiseOctaves}'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${noiseIntensity}'/></svg>`;
 
+    // Animation keyframes - using CSS variables to animate gradient position and size
+    const getAnimationKeyframes = (index: number) => {
+      const baseX = radialPositions[index].x;
+      const baseY = radialPositions[index].y;
+      const baseWidth = radialPositions[index].width;
+      const baseHeight = radialPositions[index].height;
+
+      const xOffset = index === 0 ? 12 : index === 1 ? -10 : 8;
+      const yOffset = index === 0 ? 8 : index === 1 ? -12 : -10;
+      const widthOffset = index === 0 ? 0.15 : index === 1 ? -0.12 : 0.18;
+      const heightOffset = index === 0 ? 0.12 : index === 1 ? -0.15 : 0.15;
+
+      // Create smooth interpolation with more keyframes
+      // Calculate intermediate values for smoother animation
+      const steps = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+      const keyframeSteps = steps
+        .map((step) => {
+          // Use easing function for smoother transitions
+          const eased =
+            step < 0.5 ? 2 * step * step : 1 - Math.pow(-2 * step + 2, 2) / 2;
+
+          const currentX = baseX + xOffset * eased;
+          const currentY = baseY + yOffset * eased;
+          const currentWidth = baseWidth * (1 + widthOffset * eased);
+          const currentHeight = baseHeight * (1 + heightOffset * eased);
+
+          return `
+  ${step * 100}% {
+    --grad-x-${index}: ${currentX}%;
+    --grad-y-${index}: ${currentY}%;
+    --grad-width-${index}: ${currentWidth}px;
+    --grad-height-${index}: ${currentHeight}px;
+  }`;
+        })
+        .join("");
+
+      return `@keyframes gradientMove${index} {${keyframeSteps}
+}`;
+    };
+
+    if (animationOn) {
+      const color1 = hexToRgba(calculatedColors[0], opacity);
+      const color2 = hexToRgba(calculatedColors[1], opacity);
+      const color3 = hexToRgba(calculatedColors[2], opacity);
+
+      return `${getAnimationKeyframes(0)}
+${getAnimationKeyframes(1)}
+${getAnimationKeyframes(2)}
+
+.my-gradient-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.my-gradient-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: ${linear};
+  z-index: 0;
+  /* Linear gradient is fixed, no animation */
+}
+
+.my-gradient-bg .gradient-layer-0 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(var(--grad-width-0, ${
+    radialPositions[0].width
+  }px) var(--grad-height-0, ${
+        radialPositions[0].height
+      }px) at var(--grad-x-0, ${radialPositions[0].x}%) var(--grad-y-0, ${
+        radialPositions[0].y
+      }%), ${color1} 0%, transparent 60%);
+  animation: gradientMove0 4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  will-change: background;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  z-index: 1;
+}
+
+.my-gradient-bg .gradient-layer-1 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(var(--grad-width-1, ${
+    radialPositions[1].width
+  }px) var(--grad-height-1, ${
+        radialPositions[1].height
+      }px) at var(--grad-x-1, ${radialPositions[1].x}%) var(--grad-y-1, ${
+        radialPositions[1].y
+      }%), ${color2} 0%, transparent 60%);
+  animation: gradientMove1 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  will-change: background;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  z-index: 2;
+}
+
+.my-gradient-bg .gradient-layer-2 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(var(--grad-width-2, ${
+    radialPositions[2].width
+  }px) var(--grad-height-2, ${
+        radialPositions[2].height
+      }px) at var(--grad-x-2, ${radialPositions[2].x}%) var(--grad-y-2, ${
+        radialPositions[2].y
+      }%), ${color3} 0%, transparent 60%);
+  animation: gradientMove2 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  will-change: background;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  z-index: 3;
+}
+
+.my-gradient-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("${noiseSvg}");
+  pointer-events: none;
+  z-index: 4;
+}`;
+    }
+
     return `.my-gradient-bg {
   background: ${radial1}, ${radial2}, ${radial3}, ${linear};
   position: relative;
@@ -275,6 +402,7 @@ export default function GradientBuilder() {
     noiseIntensity,
     noiseFrequency,
     noiseOctaves,
+    animationOn,
   ]);
 
   const copyToClipboard = () => {
@@ -303,6 +431,7 @@ export default function GradientBuilder() {
   noiseIntensity={${noiseIntensity}}
   noiseFrequency={${noiseFrequency}}
   noiseOctaves={${noiseOctaves}}
+  animationOn={${animationOn}}
 >
   {/* Your content here */}
 </LayeredGradient>`;
@@ -317,6 +446,7 @@ export default function GradientBuilder() {
     noiseIntensity,
     noiseFrequency,
     noiseOctaves,
+    animationOn,
   ]);
 
   const copyPropsToClipboard = () => {
@@ -721,6 +851,21 @@ export default function GradientBuilder() {
           </Box>
 
           <Divider sx={{ my: 3 }} />
+
+          {/* Animation Control */}
+          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
+            Animation
+          </Typography>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={animationOn}
+                onChange={(e) => setAnimationOn(e.target.checked)}
+              />
+            }
+            label="Enable Animation"
+            sx={{ mb: 2 }}
+          />
         </Box>
       </Paper>
 
@@ -759,6 +904,7 @@ export default function GradientBuilder() {
           noiseIntensity={noiseIntensity}
           noiseFrequency={noiseFrequency}
           noiseOctaves={noiseOctaves}
+          animationOn={animationOn}
           sx={{
             width: "100%",
             maxWidth: 800,
