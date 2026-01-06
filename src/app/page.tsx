@@ -14,6 +14,7 @@ import {
 import Button from "../components/Button";
 import { ScrollAnimation } from "../components/ScrollAnimation";
 import { EmailForm } from "../components/EmailForm";
+import { LayeredGradient } from "../components/LayeredGradient";
 import { useEffect, useState } from "react";
 import { projects } from "../data/projects";
 

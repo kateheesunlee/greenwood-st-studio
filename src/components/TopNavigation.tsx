@@ -46,12 +46,19 @@ export function TopNavigation() {
     handleClose(); // Close mobile menu after clicking
   };
 
+  const isGradientPage =
+    pathname === "/gradient-builder" || pathname === "/gradient-test";
+
   return (
     <AppBar
-      position="static"
+      position="fixed"
       elevation={0}
       sx={{
         backgroundColor: pathname === "/" ? "primary.main" : "white",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
       }}
     >
       <Toolbar>
@@ -75,6 +82,45 @@ export function TopNavigation() {
         >
           Greenwood Street Studio
         </Typography>
+
+        {isGradientPage && (
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+            <Button
+              onClick={() => router.push("/gradient-builder")}
+              sx={{
+                color:
+                  pathname === "/gradient-builder"
+                    ? "primary.main"
+                    : "text.secondary",
+                backgroundColor: "transparent",
+                fontWeight: pathname === "/gradient-builder" ? 600 : 400,
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                  color: "primary.main",
+                },
+              }}
+            >
+              Gradient Builder
+            </Button>
+            <Button
+              onClick={() => router.push("/gradient-test")}
+              sx={{
+                color:
+                  pathname === "/gradient-test"
+                    ? "primary.main"
+                    : "text.secondary",
+                backgroundColor: "transparent",
+                fontWeight: pathname === "/gradient-test" ? 600 : 400,
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                  color: "primary.main",
+                },
+              }}
+            >
+              Gradient Test
+            </Button>
+          </Box>
+        )}
 
         {pathname === "/" && (
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
@@ -138,6 +184,64 @@ export function TopNavigation() {
             >
               Say hi!
             </Button>
+          </Box>
+        )}
+
+        {/* Mobile menu for gradient pages */}
+        {isGradientPage && (
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls={open ? "mobile-menu" : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+              sx={{
+                color: "text.primary",
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="mobile-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "mobile-menu",
+              }}
+              sx={{
+                "& .MuiPaper-root": {
+                  backgroundColor: "white",
+                  color: "text.primary",
+                },
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  router.push("/gradient-builder");
+                  handleClose();
+                }}
+                selected={pathname === "/gradient-builder"}
+              >
+                <Typography textAlign="center">Gradient Builder</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  router.push("/gradient-test");
+                  handleClose();
+                }}
+                selected={pathname === "/gradient-test"}
+              >
+                <Typography textAlign="center">Gradient Test</Typography>
+              </MenuItem>
+            </Menu>
           </Box>
         )}
 

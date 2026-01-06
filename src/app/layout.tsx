@@ -62,6 +62,8 @@ export default function RootLayout({
               minHeight: "100vh",
               display: "flex",
               flexDirection: "column",
+              position: "relative",
+              zIndex: 1,
             }}
           >
             <TopNavigation />
@@ -71,6 +73,7 @@ export default function RootLayout({
                 flex: 1,
                 display: "flex",
                 flexDirection: "column",
+                paddingTop: { xs: "56px", sm: "64px" }, // Match AppBar height
               }}
             >
               {children}

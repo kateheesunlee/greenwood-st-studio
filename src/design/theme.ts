@@ -35,10 +35,12 @@ export const muiTheme = createTheme({
       primary: M3_GREEN_TOKENS.neutral10, // #1B1C19 - 짙은 텍스트
       secondary: M3_GREEN_TOKENS.primaryLight, // #72956C - 보조 텍스트
     },
+    // ➖ Divider
+    divider: M3_GREEN_TOKENS.neutral90, // #E2E3DD - 구분선 색상
     // ⚪ Grey (Neutral 톤으로 변경)
     grey: {
       300: M3_GREEN_TOKENS.neutral90, // #E2E3DD
-      600: M3_GREEN_TOKENS.primaryLight, // #72956C
+      600: M3_GREEN_TOKENS.neutral60, // #929292
       900: M3_GREEN_TOKENS.neutral10, // #1B1C19
     },
     // 💡 Accent (Neutral 90으로 변경)
@@ -174,6 +176,13 @@ export const muiTheme = createTheme({
           backgroundColor: M3_GREEN_TOKENS.neutral90,
           color: M3_GREEN_TOKENS.neutral10,
           border: `1px solid ${M3_GREEN_TOKENS.neutral90}`,
+        },
+      },
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderColor: M3_GREEN_TOKENS.neutral60,
         },
       },
     },
