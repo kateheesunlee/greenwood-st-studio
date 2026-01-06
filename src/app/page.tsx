@@ -50,9 +50,21 @@ export default function Home() {
   return (
     <Box component="main" sx={{ flex: 1 }}>
       {/* Hero Section */}
-      <Box
-        component="section"
-        id="home"
+      <LayeredGradient
+        mainColor="#e8f9e7"
+        threshold={0.22}
+        opacity={1}
+        hueShift={0}
+        saturation={1}
+        radialPositions={[
+          { x: 20, y: 10, width: 1400, height: 800 },
+          { x: 80, y: 20, width: 1000, height: 500 },
+          { x: 70, y: 8, width: 950, height: 550 },
+        ]}
+        linearGradient={{ angle: 135 }}
+        noiseIntensity={0.22}
+        noiseFrequency={0.8}
+        noiseOctaves={4}
         sx={{
           height: "100vh",
           backgroundColor: "background.default",
@@ -106,7 +118,7 @@ export default function Home() {
             </Button>
           </Box>
         </Container>
-      </Box>
+      </LayeredGradient>
 
       {/* About Section */}
       <Box
@@ -189,12 +201,24 @@ export default function Home() {
       </Box>
 
       {/* Skills Section */}
-      <Box
-        component="section"
+      <LayeredGradient
+        mainColor="#86dfa5"
+        threshold={0.39}
+        opacity={0.62}
+        hueShift={2}
+        saturation={1}
+        radialPositions={[
+          { x: 20, y: 10, width: 1400, height: 800 },
+          { x: 64, y: 20, width: 1000, height: 500 },
+          { x: 80, y: 70, width: 1100, height: 600 },
+        ]}
+        linearGradient={{ angle: 177 }}
+        noiseIntensity={0.16}
+        noiseFrequency={0.8}
+        noiseOctaves={5}
         id="skills"
         sx={{
           minHeight: "100vh",
-          background: `linear-gradient(225deg, ${theme.palette.secondary.main} 80%, ${theme.palette.primary.light} 100%)`,
           display: "flex",
           alignItems: "center",
           py: 8,
@@ -289,7 +313,7 @@ export default function Home() {
             </ScrollAnimation>
           </Box>
         </Container>
-      </Box>
+      </LayeredGradient>
 
       {/* Projects Section */}
       <Box
@@ -471,15 +495,27 @@ export default function Home() {
       </Box>
 
       {/* Contact Section */}
-      <Box
-        component="section"
+      <LayeredGradient
+        mainColor="#43663f"
+        threshold={0.37}
+        opacity={1}
+        hueShift={2}
+        saturation={2}
+        radialPositions={[
+          { x: 20, y: 10, width: 1400, height: 800 },
+          { x: 64, y: 20, width: 1000, height: 500 },
+          { x: 80, y: 70, width: 1100, height: 600 },
+        ]}
+        linearGradient={{ angle: 248 }}
+        noiseIntensity={0.16}
+        noiseFrequency={0.8}
+        noiseOctaves={5}
         id="contact"
         sx={{
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
           py: 8,
-          background: `linear-gradient(180deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         }}
       >
         <Container maxWidth="md">
@@ -527,7 +563,7 @@ export default function Home() {
             </ScrollAnimation>
           </Box>
         </Container>
-      </Box>
+      </LayeredGradient>
 
       {/* Email Form */}
       <EmailForm open={emailFormOpen} onClose={() => setEmailFormOpen(false)} />

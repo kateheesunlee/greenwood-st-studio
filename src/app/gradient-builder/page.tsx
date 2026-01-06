@@ -282,6 +282,47 @@ export default function GradientBuilder() {
     // You could add a toast notification here
   };
 
+  // Generate component props code
+  const componentPropsCode = useMemo(() => {
+    const formatRadialPositions = (positions: typeof radialPositions) => {
+      return `[
+  { x: ${positions[0].x}, y: ${positions[0].y}, width: ${positions[0].width}, height: ${positions[0].height} },
+  { x: ${positions[1].x}, y: ${positions[1].y}, width: ${positions[1].width}, height: ${positions[1].height} },
+  { x: ${positions[2].x}, y: ${positions[2].y}, width: ${positions[2].width}, height: ${positions[2].height} }
+]`;
+    };
+
+    return `<LayeredGradient
+  mainColor="${mainColor}"
+  threshold={${threshold}}
+  opacity={${opacity}}
+  hueShift={${hueShift}}
+  saturation={${saturation}}
+  radialPositions={${formatRadialPositions(radialPositions)}}
+  linearGradient={{ angle: ${linearGradient.angle} }}
+  noiseIntensity={${noiseIntensity}}
+  noiseFrequency={${noiseFrequency}}
+  noiseOctaves={${noiseOctaves}}
+>
+  {/* Your content here */}
+</LayeredGradient>`;
+  }, [
+    mainColor,
+    threshold,
+    opacity,
+    hueShift,
+    saturation,
+    radialPositions,
+    linearGradient,
+    noiseIntensity,
+    noiseFrequency,
+    noiseOctaves,
+  ]);
+
+  const copyPropsToClipboard = () => {
+    navigator.clipboard.writeText(componentPropsCode);
+  };
+
   return (
     <Box
       sx={{
@@ -787,9 +828,47 @@ export default function GradientBuilder() {
               fontSize: "0.75rem",
               lineHeight: 1.6,
               minHeight: 0, // Important for flex scrolling
+              mb: 3,
             }}
           >
             <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{cssCode}</pre>
+          </Paper>
+
+          {/* Component Props Section */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              Component Props
+            </Typography>
+            <Tooltip title="Copy to clipboard">
+              <IconButton onClick={copyPropsToClipboard} size="small">
+                <ContentCopyIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <Paper
+            sx={{
+              flex: 1,
+              p: 2,
+              borderRadius: 0.5,
+              bgcolor: "grey.900",
+              color: "grey.100",
+              overflowY: "auto",
+              fontFamily: "monospace",
+              fontSize: "0.75rem",
+              lineHeight: 1.6,
+              minHeight: 0,
+            }}
+          >
+            <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+              {componentPropsCode}
+            </pre>
           </Paper>
         </Box>
       </Paper>
